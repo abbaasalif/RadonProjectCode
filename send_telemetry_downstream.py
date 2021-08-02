@@ -14,7 +14,6 @@ certfile = open(ca_cert)
 root_ca_cert = certfile.read()
 
 
-
 # The device connection authenticates your device to your IoT hub. The connection string for 
 # a device should never be stored in code. For the sake of simplicity we're using an environment 
 # variable here. If you created the environment variable with the IDE running, stop and restart 
@@ -29,7 +28,8 @@ client = IoTHubDeviceClient.create_from_connection_string(
 # Define the JSON message to send to IoT Hub.
 TEMPERATURE = 20.0
 HUMIDITY = 60
-MSG_TXT = '{{"deviceid": "{deviceid}","datetime": "{datetimenow}","messageid": {id1},"temperature": {temperature},"humidity": {humidity}}}'
+RADON=100.0
+MSG_TXT = '{{"deviceid": "{deviceid}","datetime": "{datetimenow}","messageid": {id1},"temperature": {temperature},"humidity": {humidity},"radon":{radon}}}'
 
 def keyboard_interrupt_handler(signal, frame):
 	print ( "IoTHubClient sample stopped" )
@@ -46,7 +46,8 @@ async def main():
 		datetimenow = str(datetime.now().isoformat())
 		temperature = TEMPERATURE + (random.random() * 15)
 		humidity = HUMIDITY + (random.random() * 20)
-		msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity)
+		radon = RADON + (random.random() * 10)
+		msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity, radon=radon)
 		message = Message(msg_txt_formatted)
 		# Send the message.
 		print( "Sending message: {}".format(message) )
