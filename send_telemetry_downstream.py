@@ -1,5 +1,4 @@
 import os
-import pwd
 import socket
 import asyncio
 import random
@@ -45,18 +44,31 @@ async def main():
 	signal.signal(signal.SIGINT, keyboard_interrupt_handler)    
 	while True:
 		# Build the message with simulated telemetry values.
-		datetimenow = str(datetime.now().isoformat())
-		temperature = TEMPERATURE + (random.random() * 15)
-		humidity = HUMIDITY + (random.random() * 20)
-		radon = RADON + (random.random() * 10)
-		msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity, radon=radon)
-		message = Message(msg_txt_formatted)
-		# Send the message.
-		print( "Sending message: {}".format(message) )
-		await client.send_message(message)
-		print ( "Message successfully sent" )
-		id+=1
-		await asyncio.sleep(5)
+		try:
+			datetimenow = str(datetime.now().isoformat())
+			temperature = TEMPERATURE + (random.random() * 15)
+			humidity = HUMIDITY + (random.random() * 20)
+			radon = RADON + (random.random() * 10)
+			msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity, radon=radon)
+			message = Message(msg_txt_formatted)
+			with open('log.json','a+') as f:
+				f.write(msg_txt_formatted)
+			# Send the message.
+			print( "Sending message: {}".format(message) )
+			await client.send_message(message)
+			print ( "Message successfully sent" )
+			id+=1
+			await asyncio.sleep(5)
+		except:
+			datetimenow = str(datetime.now().isoformat())
+			temperature = TEMPERATURE + (random.random() * 15)
+			humidity = HUMIDITY + (random.random() * 20)
+			radon = RADON + (random.random() * 10)
+			msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity, radon=radon)
+			message = Message(msg_txt_formatted)
+			with open('log.json','a+') as f:
+				f.write(msg_txt_formatted)
+			await asyncio.sleep(5)
 	await client.shutdown()
 
 if __name__ == '__main__':
