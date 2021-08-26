@@ -8,7 +8,7 @@ from azure.iot.device.aio import IoTHubDeviceClient
 from azure.iot.device import Message
 from datetime import datetime
 
-conn_str = "HostName=AbbaasHub.azure-devices.net;DeviceId=pi;SharedAccessKey=C3aiRrwSPiShwe5GuSoZidQ8K+D+mRmxmoMG0PhlrlI=;GatewayHostName=cloud-vm"
+conn_str = "HostName=AbbaasHub.azure-devices.net;DeviceId=pi;SharedAccessKey=C3aiRrwSPiShwe5GuSoZidQ8K+D+mRmxmoMG0PhlrlI=;GatewayHostName=mcpslab"
 ca_cert = "azure-iot-test-only.root.ca.cert.pem"
 certfile = open(ca_cert)
 root_ca_cert = certfile.read()
