@@ -40,8 +40,8 @@ async def main():
 	print ( "IoT Hub device sending periodic messages, press Ctrl-C to exit" )
 	id=0
 	#deviceid = pwd.getpwuid(os.getuid())[0]
-	# deviceid = socket.gethostname()
-	deviceid = 'pi'
+	deviceid = socket.gethostname()
+	#deviceid = 'pi'
 	# Process the keyboard interrupt.
 	signal.signal(signal.SIGINT, keyboard_interrupt_handler)    
 	while True:
