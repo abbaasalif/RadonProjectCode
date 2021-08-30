@@ -7,6 +7,7 @@ import signal
 from azure.iot.device.aio import IoTHubDeviceClient
 from azure.iot.device import Message
 from datetime import datetime
+import pandas as pd
 
 conn_str = "HostName=AbbaasHub.azure-devices.net;DeviceId=pi;SharedAccessKey=C3aiRrwSPiShwe5GuSoZidQ8K+D+mRmxmoMG0PhlrlI=;GatewayHostName=mcpslab"
 ca_cert = "azure-iot-test-only.root.ca.cert.pem"
@@ -39,7 +40,8 @@ async def main():
 	print ( "IoT Hub device sending periodic messages, press Ctrl-C to exit" )
 	id=0
 	#deviceid = pwd.getpwuid(os.getuid())[0]
-	deviceid = socket.gethostname()
+	# deviceid = socket.gethostname()
+	deviceid = 'pi'
 	# Process the keyboard interrupt.
 	signal.signal(signal.SIGINT, keyboard_interrupt_handler)    
 	while True:
@@ -51,11 +53,14 @@ async def main():
 			radon = RADON + (random.random() * 10)
 			msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity, radon=radon)
 			message = Message(msg_txt_formatted)
-			with open('log.json','a+') as f:
-				f.write(msg_txt_formatted)
-			# Send the message.
-			print( "Sending message: {}".format(message) )
+			header = "deviceid, datetime, messageid, temperature, humidity, radon\n"
+			if not os.path.exists('log.csv'):
+				with open('log.csv','w+') as f:
+					f.write(header)
+			with open('log.csv','a+') as f:	
+				f.write(f'{deviceid},{datetimenow},{id},{temperature},{humidity},{radon}\n')
 			await client.send_message(message)
+			print( "Sending message: {}".format(message) )
 			print ( "Message successfully sent" )
 			id+=1
 			await asyncio.sleep(5)
@@ -66,8 +71,15 @@ async def main():
 			radon = RADON + (random.random() * 10)
 			msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity, radon=radon)
 			message = Message(msg_txt_formatted)
-			with open('log.json','a+') as f:
-				f.write(msg_txt_formatted)
+			if not os.path.exists('log.csv'):
+				with open('log.csv','w+') as f:
+					f.write(header)
+			with open('log.csv','a+') as f:	
+				f.write(f'{deviceid},{datetimenow},{id},{temperature},{humidity},{radon}\n')
+			print("Problem with connection saving in log.csv")
+			print("Saving Message: {}".format(message))
+			print("Message saved successfully")
+			id+=1
 			await asyncio.sleep(5)
 	await client.shutdown()
 
