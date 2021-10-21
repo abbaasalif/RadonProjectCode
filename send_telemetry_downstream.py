@@ -35,7 +35,8 @@ MOISTURE = 30.0
 VOC=5.0
 CO2 = 10.0
 O2 = 20.0
-MSG_TXT = '{{"deviceid": "{deviceid}","datetime": "{datetimenow}","messageid": {id1},"temperature": {temperature},"humidity": {humidity},"pressure":{pressure},"moisture":{moisture},"VOC":{voc},"CO2":{co2},"O2":{o2},"radon":{radon}}}'
+GAS = 10.0
+MSG_TXT = '{{"deviceid": "{deviceid}","datetime": "{datetimenow}","messageid": {id1},"temperature": {temperature},"humidity": {humidity},"pressure":{pressure},"moisture":{moisture},"VOC":{voc},"CO2":{co2},"O2":{o2},"gas":{gas},"radon":{radon}}}'
 
 def keyboard_interrupt_handler(signal, frame):
 	print ( "IoTHubClient sample stopped" )
@@ -61,14 +62,15 @@ async def main():
 			voc = VOC + (random.random() * 10)
 			co2 = CO2 + (random.random() * 10)
 			o2 = O2 + (random.random() * 10)
-			msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity, radon=radon, pressure=pressure, moisture=moisture, voc = voc, co2 = co2, o2 =o2)
+			gas = GAS + (random.random() * 10)
+			msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity, radon=radon, pressure=pressure, moisture=moisture, voc = voc, co2 = co2, o2 =o2, gas=gas)
 			message = Message(msg_txt_formatted)
-			header = "deviceid, datetime, messageid, temperature, humidity, pressure, moisture, VOC, CO2, O2, radon\n"
+			header = "deviceid, datetime, messageid, temperature, humidity, pressure, moisture, VOC, CO2, O2, gas,radon\n"
 			if not os.path.exists('log.csv'):
 				with open('log.csv','w+') as f:
 					f.write(header)
 			with open('log.csv','a+') as f:	
-				f.write(f'{deviceid},{datetimenow},{id},{temperature},{humidity},{pressure},{moisture},{voc},{co2},{o2},{radon}\n')
+				f.write(f'{deviceid},{datetimenow},{id},{temperature},{humidity},{pressure},{moisture},{voc},{co2},{o2},{gas},{radon}\n')
 			await client.send_message(message)
 			print( "Sending message: {}".format(message) )
 			print ( "Message successfully sent" )
@@ -84,14 +86,15 @@ async def main():
 			voc = VOC + (random.random() * 10)
 			co2 = CO2 + (random.random() * 10)
 			o2 = O2 + (random.random() * 10)
-			msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity, radon=radon, pressure=pressure, moisture=moisture, voc = voc, co2 = co2, o2 =o2)
+			gas = GAS + (random.random() * 10)
+			msg_txt_formatted = MSG_TXT.format(deviceid = deviceid,datetimenow=datetimenow,id1=id,temperature=temperature, humidity=humidity, radon=radon, pressure=pressure, moisture=moisture, voc = voc, co2 = co2, o2 =o2, gas=gas)
 			message = Message(msg_txt_formatted)
-			header = "deviceid, datetime, messageid, temperature, humidity, pressure, moisture, VOC, CO2, O2, radon\n"
+			header = "deviceid, datetime, messageid, temperature, humidity, pressure, moisture, VOC, CO2, O2, gas,radon\n"
 			if not os.path.exists('log.csv'):
 				with open('log.csv','w+') as f:
 					f.write(header)
 			with open('log.csv','a+') as f:	
-				f.write(f'{deviceid},{datetimenow},{id},{temperature},{humidity},{pressure},{moisture},{voc},{co2},{o2},{radon}\n')
+				f.write(f'{deviceid},{datetimenow},{id},{temperature},{humidity},{pressure},{moisture},{voc},{co2},{o2},{gas},{radon}\n')
 			print("Problem with connection saving in log.csv")
 			print("Saving Message: {}".format(message))
 			print("Message saved successfully")
