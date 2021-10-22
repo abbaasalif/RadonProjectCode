@@ -3,3 +3,8 @@ azure-iot-hub
 azure-iothub-service-client
 azure-iothub-device-client
 pandas
+mysql-connector-python
+cryptography
+websockets==8.1
+asyncio
+hbmqtt
